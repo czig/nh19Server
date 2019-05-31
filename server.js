@@ -132,8 +132,6 @@ apiRoutes.post('/submitExitSurvey', (req,res) => {
     //pull values from request
     receivedData = []
     for (var key in req.body) {
-        console.log(key,req.body[key])
-        console.log(typeof(req.body[key]))
         receivedData.push(req.body[key])
     }
     
