@@ -1,0 +1,2 @@
+create table camp_surveys(submitDate TEXT, grade TEXT, 
+branch TEXT, status TEXT, role TEXT, daysAtExercise INT, deployedPreviously TEXT, supportedPreviously TEXT, planningAttendance TEXT, utilization TEXT, utilizationComments TEXT, training TEXT, trainingComments TEXT, deployedEnv TEXT, deployedEnvComments TEXT, timelyEquipment TEXT, timelyEquipmentComments TEXT, neededEquipment TEXT, neededEquipmentComments, planningRating TEXT, planningRatingComments TEXT, commNetworks TEXT, commNetworksComments, communicate TEXT, communicateComments TEXT);
