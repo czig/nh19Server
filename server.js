@@ -132,17 +132,20 @@ apiRoutes.post('/submitExitSurvey', (req,res) => {
     //pull values from request
     receivedData = []
     for (var key in req.body) {
+        console.log(key,req.body[key])
+        console.log(typeof(req.body[key]))
         receivedData.push(req.body[key])
     }
     
     //set up sql insert
     let sqlPost = `INSERT INTO exit_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, training, trainingComments, deployedEnv, deployedEnvComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, otherServices, otherServicesComments, partnerNation, partnerNationComments, knowledge, knowledgeComments, utilization, utilizationComments, training, trainingComments, deployedEnv, deployedEnvComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, socialExchanges, socialExchangesComments, professionalExchanges, professionalExchangesComments, socialRelationships, socialRelationshipsComments, professionalRelationships, professionalRelationshipsComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
             //send error back
+            console.log(err)
             res.status(400).send({
                 success: false,
                 message: 'Error attempting to submit data.'
