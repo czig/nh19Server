@@ -137,11 +137,12 @@ apiRoutes.post('/submitCampSurvey', (req,res) => {
     
     //set up sql insert
     let sqlPost = `INSERT INTO camp_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
+            console.log(err)
             //send error back
             res.status(400).send({
                 success: false,
