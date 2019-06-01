@@ -100,6 +100,34 @@ apiRoutes.post('/spoofPost',(req,res) => {
     }
 })
 
+apiRoutes.post('/submitEntrySurvey', (req,res) => {
+    //pull values from request
+    receivedData = []
+    for (var key in req.body) {
+        receivedData.push(req.body[key])
+    }
+    
+    //set up sql insert
+    let sqlPost = `INSERT INTO entry_surveys 
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, religiousPreference, homeSupport, homeSupportComments, afsouthSupport, afsouthSupportComments, adequateTime, adequateTimeComments, deployInfo, deployInfoComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+    //run insert
+    db.run(sqlPost, receivedData, function(err) {
+        if (err) {
+            //send error back
+            res.status(400).send({
+                success: false,
+                message: 'Error attempting to submit data.'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                message: 'Data successfully submitted!'
+            })
+        }
+    })
+})
+
 apiRoutes.post('/submitCampSurvey', (req,res) => {
     //pull values from request
     receivedData = []
