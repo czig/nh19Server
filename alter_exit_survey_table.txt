@@ -1,0 +1,4 @@
+alter table exit_surveys add column livingConditions TEXT;
+alter table exit_surveys add column livingConditionsComments TEXT;
+alter table exit_surveys add column healthNeeds TEXT;
+alter table exit_surveys add column healthNeedsComments TEXT;

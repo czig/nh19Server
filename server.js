@@ -100,6 +100,34 @@ apiRoutes.post('/spoofPost',(req,res) => {
     }
 })
 
+apiRoutes.post('/submitEntrySurvey', (req,res) => {
+    //pull values from request
+    receivedData = []
+    for (var key in req.body) {
+        receivedData.push(req.body[key])
+    }
+    
+    //set up sql insert
+    let sqlPost = `INSERT INTO entry_surveys 
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, religiousPreference, homeSupport, homeSupportComments, afsouthSupport, afsouthSupportComments, adequateTime, adequateTimeComments, deployInfo, deployInfoComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+    //run insert
+    db.run(sqlPost, receivedData, function(err) {
+        if (err) {
+            //send error back
+            res.status(400).send({
+                success: false,
+                message: 'Error attempting to submit data.'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                message: 'Data successfully submitted!'
+            })
+        }
+    })
+})
+
 apiRoutes.post('/submitCampSurvey', (req,res) => {
     //pull values from request
     receivedData = []
@@ -109,11 +137,12 @@ apiRoutes.post('/submitCampSurvey', (req,res) => {
     
     //set up sql insert
     let sqlPost = `INSERT INTO camp_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, skillSets, skillSetsComments, training, trainingComments, deployedEnv, deployedEnvComments, deployInfo, deployInfoComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
+            console.log(err)
             //send error back
             res.status(400).send({
                 success: false,
@@ -137,8 +166,8 @@ apiRoutes.post('/submitExitSurvey', (req,res) => {
     
     //set up sql insert
     let sqlPost = `INSERT INTO exit_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, otherServices, otherServicesComments, partnerNation, partnerNationComments, knowledge, knowledgeComments, utilization, utilizationComments, training, trainingComments, deployedEnv, deployedEnvComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, socialExchanges, socialExchangesComments, professionalExchanges, professionalExchangesComments, socialRelationships, socialRelationshipsComments, professionalRelationships, professionalRelationshipsComments, additionalComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, otherServices, otherServicesComments, partnerNation, partnerNationComments, knowledge, knowledgeComments, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, socialExchanges, socialExchangesComments, professionalExchanges, professionalExchangesComments, socialRelationships, socialRelationshipsComments, professionalRelationships, professionalRelationshipsComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
