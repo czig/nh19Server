@@ -1,0 +1,2 @@
+alter table entry_surveys add column readInstructions TEXT;
+alter table entry_surveys add column readInstructionsComments TEXT;
