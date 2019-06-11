@@ -21,6 +21,7 @@ var formidableMiddleware = require('express-formidable')
 // =======================
 var port = process.env.PORT || 5005 // used to create, sign, and verify tokens
 let db = new sqlite3.Database(config.database)
+let analysisDb = new sqlite3.Database(config.analysisDb)
 
 //CORS
 //Requests are only allowed from whitelisted url
@@ -100,6 +101,60 @@ apiRoutes.post('/spoofPost',(req,res) => {
     }
 })
 
+apiRoutes.get('/getEntrySurveys', (req,res) => {
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo from entry_surveys`
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
+apiRoutes.get('/getMidSurveys', (req,res) => {
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, utilization, training, livingConditions, healthNeeds, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate from camp_surveys`
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
+apiRoutes.get('/getExitSurveys', (req,res) => {
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, conductingForeign, otherServices, partnerNation, knowledge, utilization, training, deployedEnv, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate, socialExchanges, professionalExchanges, socialRelationships, professionalRelationships, livingConditions, healthNeeds from exit_surveys`
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
 apiRoutes.post('/submitEntrySurvey', (req,res) => {
     //pull values from request
     receivedData = []
@@ -109,8 +164,8 @@ apiRoutes.post('/submitEntrySurvey', (req,res) => {
     
     //set up sql insert
     let sqlPost = `INSERT INTO entry_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, religiousPreference, homeSupport, homeSupportComments, afsouthSupport, afsouthSupportComments, adequateTime, adequateTimeComments, deployInfo, deployInfoComments, additionalComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, religiousPreference, homeSupport, homeSupportComments, afsouthSupport, afsouthSupportComments, adequateTime, adequateTimeComments, deployInfo, deployInfoComments, readInstructions, readInstructionsComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
