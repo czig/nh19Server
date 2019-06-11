@@ -102,7 +102,7 @@ apiRoutes.post('/spoofPost',(req,res) => {
 })
 
 apiRoutes.get('/getEntrySurveys', (req,res) => {
-    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo from entry_surveys`
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo from entry_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
@@ -120,7 +120,7 @@ apiRoutes.get('/getEntrySurveys', (req,res) => {
 })
 
 apiRoutes.get('/getMidSurveys', (req,res) => {
-    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, planningAttendance, utilization, training, livingConditions, healthNeeds, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate from camp_surveys`
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, utilization, training, livingConditions, healthNeeds, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate from camp_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
@@ -138,7 +138,7 @@ apiRoutes.get('/getMidSurveys', (req,res) => {
 })
 
 apiRoutes.get('/getExitSurveys', (req,res) => {
-    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, planningAttendance, deployAbility, conductingForeign, otherServices, partnerNation, knowledge, utilization, training, deployedEnv, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate, socialExchanges, professionalExchanges, socialRelationships, professionalRelationships, livingConditions, healthNeeds from exit_surveys`
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, conductingForeign, otherServices, partnerNation, knowledge, utilization, training, deployedEnv, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate, socialExchanges, professionalExchanges, socialRelationships, professionalRelationships, livingConditions, healthNeeds from exit_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
