@@ -26,27 +26,30 @@ grade_dict = {
 entry_df = pd.read_sql("""select * from entry_surveys""", engine)
 camp_df = pd.read_sql("""select * from camp_surveys""",engine)
 exit_df = pd.read_sql("""select * from exit_surveys""",engine)
-print('first entry surveys')
-print(exit_df['grade'])
+print('db1 entry survey shape: ',entry_df.shape)
+print('db1 camp survey shape: ',camp_df.shape)
+print('db1 exit survey shape: ',exit_df.shape)
 
 entry_df2 = pd.read_sql("""select * from entry_surveys""", engine2)
 camp_df2 = pd.read_sql("""select * from camp_surveys""",engine2)
 exit_df2 = pd.read_sql("""select * from exit_surveys""",engine2)
-
-print('second entry surveys')
-print(exit_df2['grade'])
+print('db2 entry survey shape: ', entry_df2.shape)
+print('db2 camp survey shape: ', camp_df2.shape)
+print('db2 exit survey shape: ', exit_df2.shape)
 
 #combine databases into one
 all_entry = pd.concat([entry_df, entry_df2])
 all_camp = pd.concat([camp_df, camp_df2])
 all_exit = pd.concat([exit_df, exit_df2])
 
+#use grade_dict above to standardize grades
 all_entry['grade'].replace(grade_dict, inplace=True)
 all_camp['grade'].replace(grade_dict, inplace=True)
 all_exit['grade'].replace(grade_dict, inplace=True)
 
-print('combined entry surveys')
-print(all_exit['grade'])
+print('combined entry survey shape: ', all_entry.shape)
+print('combined camp survey shape: ', all_camp.shape)
+print('combined exit survey shape: ', all_exit.shape)
 
 all_entry.to_sql('entry_surveys',con=out_engine,if_exists="replace")
 all_camp.to_sql('camp_surveys',con=out_engine,if_exists="replace")
