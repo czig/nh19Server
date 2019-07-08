@@ -102,7 +102,26 @@ apiRoutes.post('/spoofPost',(req,res) => {
 })
 
 apiRoutes.get('/getEntrySurveys', (req,res) => {
-    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo from entry_surveys`
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo, readInstructions from entry_surveys`
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
+apiRoutes.post('/getEntryComment', (req,res) => {
+    var commentName = req.body.comment
+    let sqlGet = `select ${commentName} from entry_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
