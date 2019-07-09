@@ -120,8 +120,24 @@ apiRoutes.get('/getEntrySurveys', (req,res) => {
 })
 
 apiRoutes.post('/getEntryComment', (req,res) => {
+    //pull values from request
     var commentName = req.body.comment
+    var columnName = req.body.filters.columnName
+    var filters = req.body.filters.filters
+    //dynamically build sql statement
     let sqlGet = `select ${commentName} from entry_surveys`
+    if (filters.length > 0) {
+        //append where clause to only select comments that fall into category currently filtered on chart 
+        sqlGet += ' where ' + columnName + ' in ('
+        for (let i = 0; i < filters.length; i++) {
+            sqlGet += "'" + filters[i] + "'" 
+            if (i < filters.length - 1) {
+                sqlGet += ","
+            } 
+        }
+        sqlGet += ')'
+    }
+    //get rows from database
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
@@ -130,6 +146,7 @@ apiRoutes.post('/getEntryComment', (req,res) => {
                  data: 'Error'
             })
         } else {
+            console.log('success')
             res.status(200).send({
                 success: true,
                 data: rows
