@@ -102,7 +102,7 @@ apiRoutes.post('/spoofPost',(req,res) => {
 })
 
 apiRoutes.get('/getEntrySurveys', (req,res) => {
-    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo from entry_surveys`
+    let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, homeSupport, afsouthSupport, adequateTime, deployInfo, readInstructions from entry_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
         if (err) {
             throw err; 
@@ -111,6 +111,42 @@ apiRoutes.get('/getEntrySurveys', (req,res) => {
                  data: 'Error'
             })
         } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
+apiRoutes.post('/getEntryComment', (req,res) => {
+    //pull values from request
+    var commentName = req.body.comment
+    var columnName = req.body.filters.columnName
+    var filters = req.body.filters.filters
+    //dynamically build sql statement
+    let sqlGet = `select ${commentName} from entry_surveys`
+    if (filters.length > 0) {
+        //append where clause to only select comments that fall into category currently filtered on chart 
+        sqlGet += ' where ' + columnName + ' in ('
+        for (let i = 0; i < filters.length; i++) {
+            sqlGet += "'" + filters[i] + "'" 
+            if (i < filters.length - 1) {
+                sqlGet += ","
+            } 
+        }
+        sqlGet += ')'
+    }
+    //get rows from database
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            console.log('success')
             res.status(200).send({
                 success: true,
                 data: rows
@@ -137,6 +173,42 @@ apiRoutes.get('/getMidSurveys', (req,res) => {
     })
 })
 
+apiRoutes.post('/getMidComment', (req,res) => {
+    //pull values from request
+    var commentName = req.body.comment
+    var columnName = req.body.filters.columnName
+    var filters = req.body.filters.filters
+    //dynamically build sql statement
+    let sqlGet = `select ${commentName} from camp_surveys`
+    if (filters.length > 0) {
+        //append where clause to only select comments that fall into category currently filtered on chart 
+        sqlGet += ' where ' + columnName + ' in ('
+        for (let i = 0; i < filters.length; i++) {
+            sqlGet += "'" + filters[i] + "'" 
+            if (i < filters.length - 1) {
+                sqlGet += ","
+            } 
+        }
+        sqlGet += ')'
+    }
+    //get rows from database
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            console.log('success')
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
 apiRoutes.get('/getExitSurveys', (req,res) => {
     let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, conductingForeign, otherServices, partnerNation, knowledge, utilization, training, deployedEnv, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate, socialExchanges, professionalExchanges, socialRelationships, professionalRelationships, livingConditions, healthNeeds from exit_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
@@ -147,6 +219,42 @@ apiRoutes.get('/getExitSurveys', (req,res) => {
                  data: 'Error'
             })
         } else {
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
+apiRoutes.post('/getExitComment', (req,res) => {
+    //pull values from request
+    var commentName = req.body.comment
+    var columnName = req.body.filters.columnName
+    var filters = req.body.filters.filters
+    //dynamically build sql statement
+    let sqlGet = `select ${commentName} from exit_surveys`
+    if (filters.length > 0) {
+        //append where clause to only select comments that fall into category currently filtered on chart 
+        sqlGet += ' where ' + columnName + ' in ('
+        for (let i = 0; i < filters.length; i++) {
+            sqlGet += "'" + filters[i] + "'" 
+            if (i < filters.length - 1) {
+                sqlGet += ","
+            } 
+        }
+        sqlGet += ')'
+    }
+    //get rows from database
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            console.log('success')
             res.status(200).send({
                 success: true,
                 data: rows
@@ -221,8 +329,8 @@ apiRoutes.post('/submitExitSurvey', (req,res) => {
     
     //set up sql insert
     let sqlPost = `INSERT INTO exit_surveys 
-                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, otherServices, otherServicesComments, partnerNation, partnerNationComments, knowledge, knowledgeComments, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, socialExchanges, socialExchangesComments, professionalExchanges, professionalExchangesComments, socialRelationships, socialRelationshipsComments, professionalRelationships, professionalRelationshipsComments, additionalComments)
-                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
+                    (submitDate, grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, deployAbilityComments, conductingForeign, conductingForeignComments, otherServices, otherServicesComments, partnerNation, partnerNationComments, knowledge, knowledgeComments, utilization, utilizationComments, training, trainingComments, livingConditions, livingConditionsComments, healthNeeds, healthNeedsComments, timelyEquipment, timelyEquipmentComments, neededEquipment, neededEquipmentComments, planningRating, planningRatingComments, commNetworks, commNetworksComments, communicate, communicateComments, socialExchanges, socialExchangesComments, professionalExchanges, professionalExchangesComments, additionalComments)
+                    values (CURRENT_TIMESTAMP, (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?), (?))`
     //run insert
     db.run(sqlPost, receivedData, function(err) {
         if (err) {
