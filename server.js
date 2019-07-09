@@ -173,6 +173,42 @@ apiRoutes.get('/getMidSurveys', (req,res) => {
     })
 })
 
+apiRoutes.post('/getMidComment', (req,res) => {
+    //pull values from request
+    var commentName = req.body.comment
+    var columnName = req.body.filters.columnName
+    var filters = req.body.filters.filters
+    //dynamically build sql statement
+    let sqlGet = `select ${commentName} from camp_surveys`
+    if (filters.length > 0) {
+        //append where clause to only select comments that fall into category currently filtered on chart 
+        sqlGet += ' where ' + columnName + ' in ('
+        for (let i = 0; i < filters.length; i++) {
+            sqlGet += "'" + filters[i] + "'" 
+            if (i < filters.length - 1) {
+                sqlGet += ","
+            } 
+        }
+        sqlGet += ')'
+    }
+    //get rows from database
+    analysisDb.all(sqlGet, [], function(err, rows) {
+        if (err) {
+            throw err; 
+            res.status(400).send({
+                 success: false,
+                 data: 'Error'
+            })
+        } else {
+            console.log('success')
+            res.status(200).send({
+                success: true,
+                data: rows
+            })
+        }
+    })
+})
+
 apiRoutes.get('/getExitSurveys', (req,res) => {
     let sqlGet = `select grade, branch, status, role, daysAtExercise, deployedPreviously, supportedPreviously, planningAttendance, deployAbility, conductingForeign, otherServices, partnerNation, knowledge, utilization, training, deployedEnv, timelyEquipment, neededEquipment, planningRating, commNetworks, communicate, socialExchanges, professionalExchanges, socialRelationships, professionalRelationships, livingConditions, healthNeeds from exit_surveys`
     analysisDb.all(sqlGet, [], function(err, rows) {
