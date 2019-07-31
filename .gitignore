@@ -1,1 +1,6 @@
 node_modules/
+bigrams/
+wordclouds/
+wordfreq/
+*.db
+__pycache__/
