@@ -104,7 +104,7 @@ def plot_WordFreq(tokens,name,survey):
 #Function to make word clouds
 def make_wc(tokens,name,survey):
     text = " ".join(tokens)
-    wc = WordCloud(width = 1000, height = 800, background_color = "white").generate(text)
+    wc = WordCloud(width = 1000, height = 800, background_color = "white", collocations=False).generate(text)
     fig = plt.figure(figsize=(18,14))
     plt.imshow(wc, interpolation = 'bilinear')
     plt.axis("off")
