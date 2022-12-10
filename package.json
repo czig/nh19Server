@@ -4,7 +4,7 @@
     "body-parser": "^1.17.2",
     "cors": "^2.8.4",
     "ejs": "^2.5.7",
-    "express": "^4.15.4",
+    "express": "^4.17.3",
     "express-brute": "^1.0.1",
     "express-formidable": "^1.2.0",
     "global": "^4.3.2",
